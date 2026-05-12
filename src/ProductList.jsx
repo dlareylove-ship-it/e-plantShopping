@@ -1,64 +1,66 @@
-/*
-  E-PlantShopping Project Review (ProductList.jsx)
+<div>
+  <div style={styleObjUl}>
+    <div>
+      <a href="#" onClick={handlePlantsClick} style={styleA}>
+        Plants
+      </a>
+    </div>
 
-  The submitted URL correctly points to the repository named "e-plantShopping" and redirects to ProductList.jsx.
+    <div>
+      <a href="#" onClick={handleCartClick} style={styleA}>
+        <h1 className="cart">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 256 256"
+            id="IconChangeColor"
+            height="68"
+            width="68"
+          >
+            <rect width="156" height="156" fill="none"></rect>
+            <circle cx="80" cy="216" r="12"></circle>
+            <circle cx="184" cy="216" r="12"></circle>
+            <path
+              d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8"
+              fill="none"
+              stroke="#faf9f9"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              id="mainIconPathAttribute"
+            ></path>
+          </svg>
+        </h1>
+      </a>
+    </div>
+  </div>
+</div>
 
-  CURRENT IMPLEMENTATION:
-  - A navbar is implemented with "Plants" and a Cart icon.
-  - Navigation is handled using onClick events with local state (showCart).
-  - Conditional rendering is used to switch between Product List and Cart view.
-  - A product-grid container exists for displaying plant items.
-  - CartItem component is correctly rendered when showCart is true.
+{/* MAIN CONTENT */}
+{!showCart ? (
+  <div className="product-grid">
+    {plantsArray.map((plant) => (
+      <div key={plant.id} className="plant-card">
+        <img
+          src={plant.image}
+          alt={plant.name}
+          className="plant-image"
+        />
 
-  ISSUES IDENTIFIED:
+        <h3 className="plant-name">{plant.name}</h3>
 
-  1. Missing Dynamic Rendering:
-     - The plantsArray is defined but NOT rendered using the map() function.
-     - Plant cards are not dynamically generated.
-     - This prevents display of required multiple plant items per category (minimum 6 per category requirement).
-     - Required plant details (image, name, price) are not being rendered dynamically.
+        <p className="plant-price">${plant.price}</p>
 
-  2. Limited Navbar / Navigation Handling:
-     - Navbar exists and works via state toggling.
-     - However, navigation is not consistent across views and depends entirely on local state.
-     - This can reduce scalability and user experience compared to proper routing (e.g., React Router).
+        <button
+          onClick={() => dispatch(addItem(plant))}
+          className="add-to-cart-btn"
+        >
+          Add to Cart
+        </button>
+      </div>
+    ))}
+  </div>
+) : (
+  <CartItem onContinueShopping={handleContinueShopping} />
+)}
 
-  CURRENT STRUCTURE SUMMARY:
-
-    {!showCart ? (
-        <div className="product-grid">
-            {/* MISSING IMPLEMENTATION:
-                plantsArray.map((plant) => (
-                    <div key={plant.id} className="plant-card">
-                        <img src={plant.image} alt={plant.name} />
-                        <h3>{plant.name}</h3>
-                        <p>${plant.price}</p>
-                    </div>
-                ))
-            */}
-        </div>
-    ) : (
-        <CartItem onContinueShopping={handleContinueShopping} />
-    )}
-
-  REQUIRED FIXES:
-
-  1. Implement Dynamic Rendering using map():
-     - Use plantsArray.map() inside product-grid
-     - Render:
-         - Image thumbnail
-         - Plant name
-         - Plant price
-
-  2. Improve Navigation Structure:
-     - Consider React Router for better page control
-     - Ensure navbar remains consistent across all views
-     - Avoid relying only on showCart state for navigation
-
-  3. UI Consistency:
-     - Ensure plant cards are styled consistently
-     - Maintain grid layout for all items
-
-  OVERALL SUMMARY:
-  The project has a solid base structure with functional navigation and conditional rendering. However, it does not yet meet full requirements due to missing dynamic rendering of plant data using map(). Implementing this will significantly improve functionality, completeness, and grading performance.
-*/
+export default ProductList;
