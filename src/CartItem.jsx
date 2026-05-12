@@ -1,129 +1,66 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeItem, updateQuantity } from './CartSlice';
-import './CartItem.css';
-
-const CartItem = ({ onContinueShopping }) => {
-  const cart = useSelector(state => state.cart.items);
-  const dispatch = useDispatch();
-
-  // Calculate total amount for all products in the cart
-  const calculateTotalAmount = () => {
-    return cart.reduce((total, item) => {
-      return total + item.cost * item.quantity;
-    }, 0);
-  };
-
-  const handleContinueShopping = (e) => {
-    e.preventDefault();
-    if (onContinueShopping) {
-      onContinueShopping();
-    }
-  };
-
-  const handleIncrement = (item) => {
-    dispatch(
-      updateQuantity({
-        id: item.id,
-        quantity: item.quantity + 1,
-      })
-    );
-  };
-
-  const handleDecrement = (item) => {
-    if (item.quantity > 1) {
-      dispatch(
-        updateQuantity({
-          id: item.id,
-          quantity: item.quantity - 1,
-        })
-      );
-    } else {
-      // remove item if quantity goes to 0
-      dispatch(removeItem(item.id));
-    }
-  };
-
-  const handleRemove = (item) => {
-    dispatch(removeItem(item.id));
-  };
-
-  // Calculate total cost based on quantity for an item
-  const calculateTotalCost = (item) => {
-    return item.cost * item.quantity;
-  };
-
-  return (
-    <div className="cart-container">
-      <h2 style={{ color: 'black' }}>
-        Total Cart Amount: ${calculateTotalAmount()}
-      </h2>
-
-      <div>
-        {cart.map(item => (
-          <div className="cart-item" key={item.id}>
-            <img className="cart-item-image" src={item.image} alt={item.name} />
-
-            <div className="cart-item-details">
-              <div className="cart-item-name">{item.name}</div>
-              <div className="cart-item-cost">${item.cost}</div>
-
-              <div className="cart-item-quantity">
-                <button
-                  className="cart-item-button cart-item-button-dec"
-                  onClick={() => handleDecrement(item)}
-                >
-                  -
-                </button>
-
-                <span className="cart-item-quantity-value">
-                  {item.quantity}
-                </span>
-
-                <button
-                  className="cart-item-button cart-item-button-inc"
-                  onClick={() => handleIncrement(item)}
-                >
-                  +
-                </button>
-              </div>
-
-              <div className="cart-item-total">
-                Total: ${calculateTotalCost(item)}
-              </div>
-
-              <button
-                className="cart-item-delete"
-                onClick={() => handleRemove(item)}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div
-        style={{ marginTop: '20px', color: 'black' }}
-        className="total_cart_amount"
-      />
-
-      <div className="continue_shopping_btn">
-        <button
-          className="get-started-button"
-          onClick={handleContinueShopping}
-        >
-          Continue Shopping
-        </button>
-
-        <br />
-
-        <button className="get-started-button1">
-          Checkout
-        </button>
-      </div>
+<div>
+  <div style={styleObjUl}>
+    <div>
+      <a href="#" onClick={handlePlantsClick} style={styleA}>
+        Plants
+      </a>
     </div>
-  );
-};
 
-export default CartItem;
+    <div>
+      <a href="#" onClick={handleCartClick} style={styleA}>
+        <h1 className="cart">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 256 256"
+            id="IconChangeColor"
+            height="68"
+            width="68"
+          >
+            <rect width="156" height="156" fill="none"></rect>
+            <circle cx="80" cy="216" r="12"></circle>
+            <circle cx="184" cy="216" r="12"></circle>
+            <path
+              d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8"
+              fill="none"
+              stroke="#faf9f9"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              id="mainIconPathAttribute"
+            ></path>
+          </svg>
+        </h1>
+      </a>
+    </div>
+  </div>
+</div>
+
+{/* MAIN CONTENT */}
+{!showCart ? (
+  <div className="product-grid">
+    {plantsArray.map((plant) => (
+      <div key={plant.id} className="plant-card">
+        <img
+          src={plant.image}
+          alt={plant.name}
+          className="plant-image"
+        />
+
+        <h3 className="plant-name">{plant.name}</h3>
+
+        <p className="plant-price">${plant.price}</p>
+
+        <button
+          onClick={() => dispatch(addItem(plant))}
+          className="add-to-cart-btn"
+        >
+          Add to Cart
+        </button>
+      </div>
+    ))}
+  </div>
+) : (
+  <CartItem onContinueShopping={handleContinueShopping} />
+)}
+
+export default ProductList;
